@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState} from 'react';
 import { FlatList, Text, View,StyleSheet,Modal,Pressable,TextInput,ScrollView } from 'react-native';
 
 const App = () => {
@@ -7,6 +7,8 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   // console.log(data);
+
+  /////////////////////////////////////////
 
   const adduser = () =>{
     const requestOptions = {
@@ -18,38 +20,20 @@ const App = () => {
       .then(response => response.json())
       .then(data => setPostId(data.id));
   }
+  //////////////////////////////////////////////
+  const update = (id) =>{
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Sunena' })
+  };
+  fetch('https://62cd12fda43bf780085130a2.mockapi.io/get-news/users'+`/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }
 
-  // const update = (id) =>{
-  //   fetch('https://62cd12fda43bf780085130a2.mockapi.io/get-news/users', {
-  //     method: 'PUT',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       name:'suman',
-  //       id:1,
-  //     }),
-  //   })
-  //   .then((response) => response.json())
-  //   .then((responseJson) => {
-  //      alert(JSON.stringify(responseJson))
-  //   })
-  //   .catch((error) => {
-  //    console.error(error)
-  //   })
-  // };
 
-  const requestOptions = {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name:'harsh',id:'98' })
-};
-const update = async () => {
- fetch('https://62cd12fda43bf780085130a2.mockapi.io/get-news/users', requestOptions)
-    .then(response => response.json())
-    .then(data => console.log(data));
-};
+ ////////////////////////////////////////
 
   const deleted = (id) =>{
     console.log(id);
@@ -65,6 +49,8 @@ const update = async () => {
       .then(data => console.log(data));
   }
 
+  //////////////////////////////////////////////////
+
 useEffect(() => {
   fetch('https://62cd12fda43bf780085130a2.mockapi.io/get-news/users')
     .then((response) => response.json())
@@ -76,12 +62,12 @@ useEffect(() => {
 
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor:'#faedcd'}}>
     <View style={{ flex: 1, padding: 24 }}>
       {isLoading ? <Text>Loading...</Text> : 
       ( <View style={{ flex: 1, flexDirection: 'column', justifyContent:  'space-between'}}>
-          <Text style={{ fontSize: 18, color: 'green', textAlign: 'center'}}>{data.name}</Text>
-          <Text style={{ fontSize: 20, color: 'green', textAlign: 'center', paddingBottom: 10}}>Users:</Text>
+          <Text style={{ fontSize: 18, textAlign: 'center',fontWeight:'500'}}>{data.name}</Text>
+          <Text style={{ fontSize: 30,fontWeight:'900', color: '#d4a373', textAlign: 'center', paddingBottom: 10}}>Users:</Text>
           <FlatList
             data={data}
             keyExtractor={({ id }, index) => id}
@@ -91,7 +77,7 @@ useEffect(() => {
                 <Text onPress={() =>{ 
                   update(item.id)
                   setModl(true)}}>{item.id + '. ' + item.name}</Text>
-               <Text  onPress={() => deleted(item.id)} > delete </Text>
+               <Text  onPress={() => deleted(item.id)}style={{fontSize:18,fontWeight:'500'}} > delete </Text>
               </View>
             )}
           />
@@ -161,8 +147,8 @@ useEffect(() => {
           </View>
         </View>
       </Modal>
-        <View>
-      <Text style={{fontSize:15,fontWeight:'600',backgroundColor:'#2a9d8f',borderRadius:5,height:30,width:100,color:'white'}}  onPress={() => setModalVisible(true)}> Add User </Text>
+        <View style={{alignItems:'center',backgroundColor:'#d4a373',height:30,width:100,justifyContent:'center',borderRadius:7}}>
+      <Text style={{fontSize:15,fontWeight:'600',color:'white'}}  onPress={() => setModalVisible(true)}> Add User </Text>
       </View>
     </View>
     </ScrollView>
